@@ -33,7 +33,7 @@ const NavBar = () => {
             {/* Workouts */}
             <li>
               <Link
-                href="/workouts"
+                href="/"
                 className="
                   rounded-full
                   bg-[#273600]
@@ -153,7 +153,7 @@ const NavBar = () => {
             "
           >
             <li>
-              <Link href="/workouts" className="text-[#b7f000]">
+              <Link href="/" className="text-[#b7f000]">
                 Workouts
               </Link>
             </li>
