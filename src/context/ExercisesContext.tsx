@@ -20,11 +20,20 @@ const ExercisesProvider = ({ children }: { children: ReactNode }) => {
   const [todayPlan, setTodayPlan] = useState<IExercise[]>([]);
   const [savePlan, setSavePlan] = useState<IExercise[]>([]);
 
+  const removeFromTodayPlan = (exerciseId: number) => {
+    setTodayPlan(todayPlan.filter((exercise) => exercise.id !== exerciseId));
+  };
+  const removeFromSavePlan = (exerciseId: number) => {
+    setSavePlan(savePlan.filter((exercise) => exercise.id !== exerciseId));
+  };
+
   const sharedData: IExercisesContext = {
     todayPlan,
     setTodayPlan,
     savePlan,
     setSavePlan,
+    removeFromTodayPlan,
+    removeFromSavePlan,
   };
 
   return (

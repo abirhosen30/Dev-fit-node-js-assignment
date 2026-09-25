@@ -50,7 +50,7 @@ const TodayPlanButton = ({ exercise }: TodayPlanButtonProps) => {
       className="rounded-md bg-lime-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-lime-300"
       onClick={handleAddToTodayPlan}
     >
-      Add to Today's Plan
+      Add to Today&apos;s Plan
     </button>
   );
 };

@@ -71,7 +71,7 @@ const NavBar = () => {
 
           {/* Plan */}
           <Link
-            href="/plan"
+            href="/my-page"
             className="flex items-center gap-1 text-gray-400 hover:text-white"
           >
             <span>Plan</span>
@@ -93,7 +93,7 @@ const NavBar = () => {
 
           {/* Saved */}
           <Link
-            href="/saved"
+            href="/my-page"
             className="flex items-center gap-1 text-gray-400 hover:text-white"
           >
             <span>Saved</span>
@@ -166,7 +166,7 @@ const NavBar = () => {
 
             <li>
               <Link
-                href="/plan"
+                href="/my-page"
                 className="flex items-center justify-between text-gray-400"
               >
                 <span>Plan</span>
@@ -176,7 +176,7 @@ const NavBar = () => {
 
             <li>
               <Link
-                href="/saved"
+                href="/my-page"
                 className="flex items-center justify-between text-gray-400"
               >
                 <span>Saved</span>
