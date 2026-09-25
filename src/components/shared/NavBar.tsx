@@ -51,7 +51,7 @@ const NavBar = () => {
             {/* My Plan */}
             <li>
               <Link
-                href="/my-plan"
+                href="/context/ExercisesContext"
                 className="
                   px-3 py-1
                   text-[10px]
@@ -159,7 +159,7 @@ const NavBar = () => {
             </li>
 
             <li>
-              <Link href="/my-plan" className="text-gray-400">
+              <Link href="/context/ExercisesContext" className="text-gray-400">
                 My Plan
               </Link>
             </li>

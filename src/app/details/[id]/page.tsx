@@ -1,3 +1,5 @@
+import SavePlanButton from "@/components/exercisesDetails/SavePlanButton";
+import TodayPlanButton from "@/components/exercisesDetails/TodayPlanButton";
 import { IExercise } from "@/types/exercieses.type";
 // import { exercises } from "@/data/exercises.data"; // ⚠️ আপনার আসল data source অনুযায়ী path ঠিক করে নিন
 import Image from "next/image";
@@ -107,18 +109,8 @@ const DetailsPage = async ({ params }: DetailsPageProps) => {
 
           {/* BUTTONS */}
           <div className="mt-6 flex flex-wrap gap-3">
-            <button
-              type="button"
-              className="flex items-center gap-2 rounded-md bg-lime-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-lime-300"
-            >
-              <span>▣</span> Add to today&apos;s plan
-            </button>
-            <button
-              type="button"
-              className="flex items-center gap-2 rounded-md border border-gray-700 px-4 py-2 text-xs text-gray-300 transition hover:bg-gray-800"
-            >
-              <span>□</span> Save for later
-            </button>
+            <TodayPlanButton exercise={exercise} />
+            <SavePlanButton exercise={exercise} />
           </div>
         </div>
       </div>
