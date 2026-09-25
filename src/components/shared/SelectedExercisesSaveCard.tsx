@@ -8,7 +8,7 @@ interface ExerciseSaveCardProps {
 }
 const ExerciseSaveCard = ({ exercise, removeFromSavePlan }: ExerciseSaveCardProps) => {
   return (
-    <div className="flex items-center gap-4 border-b border-[#252a33] bg-[#0f1218] px-4 py-3">
+    <div className="flex items-center gap-4 mb-4 border-b border-[#252a33] bg-[#0f1218] px-4 py-3">
       {" "}
       {/* IMAGE */}{" "}
       <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md">

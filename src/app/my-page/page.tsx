@@ -5,6 +5,7 @@ import ExercisePlanCard from "@/components/shared/SelectedExercisesPlanCard";
 import { ExercisesContext } from "@/context/ExercisesContext";
 import { IExercise } from "@/types/exercieses.type";
 import ExerciseSaveCard from "@/components/shared/SelectedExercisesSaveCard";
+import Link from "next/link";
 
 const Page = () => {
   const context = useContext(ExercisesContext);
@@ -13,14 +14,15 @@ const Page = () => {
     throw new Error("Page must be used inside ExercisesProvider");
   }
 
-  const { todayPlan, savePlan, removeFromTodayPlan, removeFromSavePlan } = context;
+  const { todayPlan, savePlan, removeFromTodayPlan, removeFromSavePlan } =
+    context;
 
   // ১. একটি state রাখুন কোন ট্যাব সিলেক্টেড আছে ট্র্যাক করার জন্য
   const [activeTab, setActiveTab] = useState<"today" | "saved">("today");
 
-  const [sortBy, setSortBy] = useState<
-    "rating" | "duration" | "calories"
-  >("rating");
+  const [sortBy, setSortBy] = useState<"rating" | "duration" | "calories">(
+    "rating",
+  );
 
   // Sort exercises
   const sortExercises = (exercises: IExercise[]) => {
@@ -31,9 +33,7 @@ const Page = () => {
     } else if (sortBy === "duration") {
       sortedExercises.sort((a, b) => b.duration - a.duration);
     } else {
-      sortedExercises.sort(
-        (a, b) => b.caloriesBurned - a.caloriesBurned
-      );
+      sortedExercises.sort((a, b) => b.caloriesBurned - a.caloriesBurned);
     }
 
     return sortedExercises;
@@ -48,20 +48,18 @@ const Page = () => {
   // ৩. সিলেক্টেড প্ল্যানের জন্য স্ট্যাটিসটিক্স হিসেব করুন
   const totalMinutes = currentPlan.reduce(
     (total, exercise) => total + Number(exercise.duration || 0),
-    0
+    0,
   );
 
   const totalCalories = currentPlan.reduce(
     (total, exercise) => total + Number(exercise.caloriesBurned || 0),
-    0
+    0,
   );
 
   return (
     <div className="container mx-auto mt-8 px-4">
       {/* HEADER */}
-      <h2 className="text-3xl font-bold text-white">
-        MY PLAN
-      </h2>
+      <h2 className="text-3xl font-bold text-white">MY PLAN</h2>
 
       <p className="text-[12px] text-gray-400">
         Cap of five lifts for today. Finish them, then load more.
@@ -70,12 +68,9 @@ const Page = () => {
       {/* STATS (এখন স্বয়ংক্রিয়ভাবে একটিভ ট্যাবের ডাটা দেখাবে) */}
       <div className="mt-6 rounded-xl border border-[#252a33] bg-[#12161e] px-5 py-4">
         <div className="grid grid-cols-3 divide-x divide-[#252a33]">
-          
           {/* Exercises */}
           <div className="px-4 first:pl-0">
-            <p className="text-[11px] text-gray-500">
-              Exercises
-            </p>
+            <p className="text-[11px] text-gray-500">Exercises</p>
             <p className="mt-1 text-2xl font-bold text-lime-400">
               {currentPlan.length}
             </p>
@@ -83,19 +78,13 @@ const Page = () => {
 
           {/* Minutes */}
           <div className="px-6">
-            <p className="text-[11px] text-gray-500">
-              Minutes
-            </p>
-            <p className="mt-1 text-2xl font-bold text-white">
-              {totalMinutes}
-            </p>
+            <p className="text-[11px] text-gray-500">Minutes</p>
+            <p className="mt-1 text-2xl font-bold text-white">{totalMinutes}</p>
           </div>
 
           {/* Calories */}
           <div className="px-6 last:pr-0">
-            <p className="text-[11px] text-gray-500">
-              Calories
-            </p>
+            <p className="text-[11px] text-gray-500">Calories</p>
             <p className="mt-1 text-2xl font-bold text-white">
               {totalCalories}
             </p>
@@ -103,45 +92,50 @@ const Page = () => {
         </div>
       </div>
 
-      {/* SORT */}
-      <div className="mt-5 flex items-center justify-end gap-2">
-        <span className="text-[10px] text-gray-500">
-          Sort By
-        </span>
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="tabs tabs-box">
+          {/* TODAY'S PLAN TAB */}
+          <input
+            type="radio"
+            name="my_plan_tabs"
+            className="tab"
+            aria-label="Today's Plan"
+            checked={activeTab === "today"}
+            onChange={() => setActiveTab("today")}
+          />
 
-        <select
-          value={sortBy}
-          onChange={(e) =>
-            setSortBy(
-              e.target.value as
-                | "rating"
-                | "duration"
-                | "calories"
-            )
-          }
-          className="select select-sm border-gray-700 bg-[#12161e] text-xs text-gray-300"
-        >
-          <option value="rating">Rating</option>
-          <option value="duration">Duration</option>
-          <option value="calories">Calories</option>
-        </select>
+          {/* SAVED TAB */}
+          <input
+            type="radio"
+            name="my_plan_tabs"
+            className="tab"
+            aria-label="Saved"
+            checked={activeTab === "saved"}
+            onChange={() => setActiveTab("saved")}
+          />
+        </div>
+
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          <span className="text-[10px] text-gray-500">Sort By</span>
+
+          <select
+            value={sortBy}
+            onChange={(e) =>
+              setSortBy(e.target.value as "rating" | "duration" | "calories")
+            }
+            className="select select-sm min-w-[110px] border-gray-700 bg-[#12161e] px-2 py-1 text-xs text-gray-300 outline-none"
+          >
+            <option value="rating">Rating</option>
+            <option value="duration">Duration</option>
+            <option value="calories">Calories</option>
+          </select>
+        </div>
       </div>
 
-      {/* TABS */}
-      <div className="tabs tabs-box mt-4">
-
-        {/* TODAY'S PLAN TAB */}
-        <input
-          type="radio"
-          name="my_plan_tabs"
-          className="tab"
-          aria-label="Today's Plan"
-          checked={activeTab === "today"}
-          onChange={() => setActiveTab("today")}
-        />
-
-        <div className="tab-content border-base-300 bg-base-100 p-4">
-          {sortedTodayPlan.length > 0 ? (
+      {/* TABS CONTENT */}
+      <div className="mt-4">
+        {activeTab === "today" ? (
+          sortedTodayPlan.length > 0 ? (
             <div className="overflow-hidden rounded-lg border border-[#252a33]">
               {sortedTodayPlan.map((exercise) => (
                 <ExercisePlanCard
@@ -152,35 +146,37 @@ const Page = () => {
               ))}
             </div>
           ) : (
-            <EmptyState message="No exercises in today's plan." />
-          )}
-        </div>
-
-        {/* SAVED TAB */}
-        <input
-          type="radio"
-          name="my_plan_tabs"
-          className="tab"
-          aria-label="Saved"
-          checked={activeTab === "saved"}
-          onChange={() => setActiveTab("saved")}
-        />
-
-        <div className="tab-content my-4 border-base-300 bg-base-100 p-4">
-          {sortedSavePlan.length > 0 ? (
-            <div className="overflow-hidden my-4 rounded-lg border border-[#252a33]">
-              {sortedSavePlan.map((exercise) => (
-                <ExerciseSaveCard
-                  key={exercise.id}
-                  exercise={exercise}
-                  removeFromSavePlan={removeFromSavePlan}
-                />
-              ))}
+            <div className="flex flex-col items-center justify-center rounded-lg border border-[#252a33] bg-[#12161e] py-10 text-center">
+              <h2>NOTHING HERE YET</h2>
+              <p>No exercises saved yet.</p>
+              <Link href="/">
+                <button className="rounded-[60px] bg-[#C2F800] mt-4 text-black hover:bg-[#a8d800] px-4 py-2 text-sm font-medium transition">
+                  Go to workouts
+                </button>
+              </Link>
             </div>
-          ) : (
-            <EmptyState message="No exercises in saved plan." />
-          )}
-        </div>
+          )
+        ) : sortedSavePlan.length > 0 ? (
+          <div className="overflow-hidden rounded-lg border border-[#252a33]">
+            {sortedSavePlan.map((exercise) => (
+              <ExerciseSaveCard
+                key={exercise.id}
+                exercise={exercise}
+                removeFromSavePlan={removeFromSavePlan}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center rounded-lg border border-[#252a33] bg-[#12161e] py-10 text-center">
+            <h2>NOTHING HERE YET</h2>
+            <p>No exercises saved yet.</p>
+            <Link href="/">
+              <button className="rounded-[60px] bg-[#C2F800] mt-4 text-black hover:bg-[#a8d800] px-4 py-2 text-sm font-medium transition">
+                Go to workouts
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -190,9 +186,7 @@ const Page = () => {
 const EmptyState = ({ message }: { message: string }) => {
   return (
     <div className="flex min-h-[180px] items-center justify-center">
-      <p className="text-sm text-gray-500">
-        {message}
-      </p>
+      <p className="text-sm text-gray-500">{message}</p>
     </div>
   );
 };

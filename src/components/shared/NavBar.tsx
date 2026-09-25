@@ -1,48 +1,53 @@
+"use client";
+
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 import logo from "@/assets/logo.png";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ExercisesContext } from "@/context/ExercisesContext";
 
 const NavBar = () => {
+  const pathname = usePathname();
+
+  const context = useContext(ExercisesContext);
+  const todayCount = context?.todayPlan?.length || 0;
+  const savedCount = context?.savePlan?.length || 0;
+
   return (
-    <div className="min-h-14 bg-[#1c1c1e] px-4 text-white shadow-sm">
-      <div className="container mx-auto flex min-h-14 w-full items-center justify-between">
+    <div className="min-h-16 bg-[#1c1c1e] px-4 md:px-8 text-white shadow-sm flex items-center">
+      <div className="container mx-auto flex min-h-16 w-full items-center justify-between">
 
         {/* Logo */}
         <div>
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm font-bold"
+            className="flex items-center gap-2.5 text-base md:text-lg font-bold tracking-wide"
           >
             <Image
               src={logo}
               alt="FITLOG Logo"
-              width={20}
-              height={24}
-              className="h-6 w-6"
+              width={28}
+              height={28}
+              className="h-7 w-7"
             />
-
             <span>FITLOG</span>
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex">
-          <ul className="flex items-center gap-2">
+          <ul className="flex items-center gap-3">
 
             {/* Workouts */}
             <li>
               <Link
                 href="/"
-                className="
-                  rounded-full
-                  bg-[#273600]
-                  px-3 py-1
-                  text-[10px]
-                  font-medium
-                  text-[#b7f000]
-                  hover:bg-[#344900]
-                "
+                className={`px-4 py-1.5 text-xs md:text-sm font-medium transition-all ${
+                  pathname === "/"
+                    ? "rounded-full bg-[#273600] text-[#b7f000] hover:bg-[#344900]"
+                    : "text-gray-400 hover:text-white"
+                }`}
               >
                 Workouts
               </Link>
@@ -52,12 +57,11 @@ const NavBar = () => {
             <li>
               <Link
                 href="/my-page"
-                className="
-                  px-3 py-1
-                  text-[10px]
-                  text-gray-400
-                  hover:text-white
-                "
+                className={`px-4 py-1.5 text-xs md:text-sm font-medium transition-all ${
+                  pathname === "/my-page"
+                    ? "rounded-full bg-[#273600] text-[#b7f000] hover:bg-[#344900]"
+                    : "text-gray-400 hover:text-white"
+                }`}
               >
                 My Plan
               </Link>
@@ -67,49 +71,47 @@ const NavBar = () => {
         </div>
 
         {/* Desktop Right Side */}
-        <div className="hidden items-center gap-5 text-[10px] md:flex">
+        <div className="hidden items-center gap-6 text-xs md:text-sm font-medium md:flex">
 
           {/* Plan */}
           <Link
             href="/my-page"
-            className="flex items-center gap-1 text-gray-400 hover:text-white"
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
           >
             <span>Plan</span>
-
             <span
               className="
-                flex h-3.5 w-3.5
+                flex h-5 w-5
                 items-center justify-center
                 rounded-full
                 bg-[#b7f000]
-                text-[8px]
+                text-[11px]
                 font-bold
                 text-black
               "
             >
-              0
+              {todayCount}
             </span>
           </Link>
 
           {/* Saved */}
           <Link
             href="/my-page"
-            className="flex items-center gap-1 text-gray-400 hover:text-white"
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
           >
             <span>Saved</span>
-
             <span
               className="
-                flex h-3.5 w-3.5
+                flex h-5 w-5
                 items-center justify-center
                 rounded-full
                 bg-[#b7f000]
-                text-[8px]
+                text-[11px]
                 font-bold
                 text-black
               "
             >
-              0
+              {savedCount}
             </span>
           </Link>
 
@@ -124,7 +126,7 @@ const NavBar = () => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -145,21 +147,28 @@ const NavBar = () => {
               dropdown-content
               z-[1]
               mt-3
-              w-40
+              w-44
               rounded-box
               bg-[#1c1c1e]
-              p-2
+              p-3
+              text-sm
               shadow-lg
             "
           >
             <li>
-              <Link href="/" className="text-[#b7f000]">
+              <Link
+                href="/"
+                className={pathname === "/" ? "font-bold text-[#b7f000]" : "text-gray-400"}
+              >
                 Workouts
               </Link>
             </li>
 
             <li>
-              <Link href="/my-page" className="text-gray-400">
+              <Link
+                href="/my-page"
+                className={pathname === "/my-page" ? "font-bold text-[#b7f000]" : "text-gray-400"}
+              >
                 My Plan
               </Link>
             </li>
@@ -170,7 +179,7 @@ const NavBar = () => {
                 className="flex items-center justify-between text-gray-400"
               >
                 <span>Plan</span>
-                <span>0</span>
+                <span className="font-bold text-[#b7f000]">{todayCount}</span>
               </Link>
             </li>
 
@@ -180,7 +189,7 @@ const NavBar = () => {
                 className="flex items-center justify-between text-gray-400"
               >
                 <span>Saved</span>
-                <span>0</span>
+                <span className="font-bold text-[#b7f000]">{savedCount}</span>
               </Link>
             </li>
           </ul>

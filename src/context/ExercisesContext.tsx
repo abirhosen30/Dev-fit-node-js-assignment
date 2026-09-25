@@ -12,6 +12,8 @@ interface IExercisesContext {
   setTodayPlan: React.Dispatch<React.SetStateAction<IExercise[]>>;
   savePlan: IExercise[];
   setSavePlan: React.Dispatch<React.SetStateAction<IExercise[]>>;
+  removeFromTodayPlan: (exerciseId: number) => void;
+  removeFromSavePlan: (exerciseId: number) => void;
 }
 
 export const ExercisesContext = createContext<IExercisesContext | null>(null);
