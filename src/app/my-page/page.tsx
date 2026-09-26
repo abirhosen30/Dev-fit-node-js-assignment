@@ -17,12 +17,12 @@ const Page = () => {
   const { todayPlan, savePlan, removeFromTodayPlan, removeFromSavePlan } =
     context;
 
-  // ১. একটি state রাখুন কোন ট্যাব সিলেক্টেড আছে ট্র্যাক করার জন্য
   const [activeTab, setActiveTab] = useState<"today" | "saved">("today");
 
-  const [sortBy, setSortBy] = useState<"rating" | "duration" | "calories">(
-    "rating",
-  );
+  // Default sort changed to duration
+  const [sortBy, setSortBy] = useState<
+    "rating" | "duration" | "calories"
+  >("duration");
 
   // Sort exercises
   const sortExercises = (exercises: IExercise[]) => {
@@ -42,10 +42,10 @@ const Page = () => {
   const sortedTodayPlan = sortExercises(todayPlan || []);
   const sortedSavePlan = sortExercises(savePlan || []);
 
-  // ২. সিলেক্টেড ট্যাবের ওপর ভিত্তি করে প্ল্যান নির্ধারণ করুন
+  // Selected tab plan
   const currentPlan = activeTab === "today" ? todayPlan || [] : savePlan || [];
 
-  // ৩. সিলেক্টেড প্ল্যানের জন্য স্ট্যাটিসটিক্স হিসেব করুন
+  // Statistics
   const totalMinutes = currentPlan.reduce(
     (total, exercise) => total + Number(exercise.duration || 0),
     0,
@@ -65,12 +65,13 @@ const Page = () => {
         Cap of five lifts for today. Finish them, then load more.
       </p>
 
-      {/* STATS (এখন স্বয়ংক্রিয়ভাবে একটিভ ট্যাবের ডাটা দেখাবে) */}
+      {/* STATS */}
       <div className="mt-6 rounded-xl border border-[#252a33] bg-[#12161e] px-5 py-4">
         <div className="grid grid-cols-3 divide-x divide-[#252a33]">
           {/* Exercises */}
           <div className="px-4 first:pl-0">
             <p className="text-[11px] text-gray-500">Exercises</p>
+
             <p className="mt-1 text-2xl font-bold text-lime-400">
               {currentPlan.length}
             </p>
@@ -79,12 +80,16 @@ const Page = () => {
           {/* Minutes */}
           <div className="px-6">
             <p className="text-[11px] text-gray-500">Minutes</p>
-            <p className="mt-1 text-2xl font-bold text-white">{totalMinutes}</p>
+
+            <p className="mt-1 text-2xl font-bold text-white">
+              {totalMinutes}
+            </p>
           </div>
 
           {/* Calories */}
           <div className="px-6 last:pr-0">
             <p className="text-[11px] text-gray-500">Calories</p>
+
             <p className="mt-1 text-2xl font-bold text-white">
               {totalCalories}
             </p>
@@ -92,6 +97,7 @@ const Page = () => {
         </div>
       </div>
 
+      {/* TABS + SORT */}
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="tabs tabs-box">
           {/* TODAY'S PLAN TAB */}
@@ -115,20 +121,25 @@ const Page = () => {
           />
         </div>
 
+        {/* SORT */}
         <div className="flex items-center gap-2 whitespace-nowrap">
           <span className="text-[10px] text-gray-500">Sort By</span>
 
-          <select
-            value={sortBy}
-            onChange={(e) =>
-              setSortBy(e.target.value as "rating" | "duration" | "calories")
-            }
-            className="select select-sm min-w-[110px] border-gray-700 bg-[#12161e] px-2 py-1 text-xs text-gray-300 outline-none"
-          >
-            <option value="rating">Rating</option>
-            <option value="duration">Duration</option>
-            <option value="calories">Calories</option>
-          </select>
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(e) =>
+                setSortBy(
+                  e.target.value as "rating" | "duration" | "calories",
+                )
+              }
+              className="select select-sm min-w-[120px] appearance-none border-gray-700 bg-[#12161e] px-3 pr-8 text-xs text-gray-300 outline-none"
+            >
+              <option value="duration">Duration</option>
+              <option value="rating">Rating</option>
+              <option value="calories">Calories</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -148,11 +159,16 @@ const Page = () => {
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border border-[#252a33] bg-[#12161e] py-10 text-center">
               <h2>NOTHING HERE YET</h2>
-              <p>No exercises saved yet.</p>
-              <Link href="/">
-                <button className="rounded-[60px] bg-[#C2F800] mt-4 text-black hover:bg-[#a8d800] px-4 py-2 text-sm font-medium transition">
-                  Go to workouts
-                </button>
+
+              <p className="mt-2 text-sm text-gray-400">
+                Browse the library and add a lift to get today moving.
+              </p>
+
+              <Link
+                href="/#Exercises"
+                className="mt-4 rounded-[60px] bg-[#C2F800] px-4 py-2 text-sm font-medium text-black transition hover:bg-[#a8d800]"
+              >
+                Go to workouts
               </Link>
             </div>
           )
@@ -169,11 +185,16 @@ const Page = () => {
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg border border-[#252a33] bg-[#12161e] py-10 text-center">
             <h2>NOTHING HERE YET</h2>
-            <p>No exercises saved yet.</p>
-            <Link href="/">
-              <button className="rounded-[60px] bg-[#C2F800] mt-4 text-black hover:bg-[#a8d800] px-4 py-2 text-sm font-medium transition">
-                Go to workouts
-              </button>
+
+            <p className="mt-2 text-sm text-gray-400">
+              Browse the library and add a lift to get today moving.
+            </p>
+
+            <Link
+              href="/#Exercises"
+              className="mt-4 rounded-[60px] bg-[#C2F800] px-4 py-2 text-sm font-medium text-black transition hover:bg-[#a8d800]"
+            >
+              Go to workouts
             </Link>
           </div>
         )}
@@ -182,13 +203,5 @@ const Page = () => {
   );
 };
 
-/* EMPTY STATE */
-const EmptyState = ({ message }: { message: string }) => {
-  return (
-    <div className="flex min-h-[180px] items-center justify-center">
-      <p className="text-sm text-gray-500">{message}</p>
-    </div>
-  );
-};
-
 export default Page;
+

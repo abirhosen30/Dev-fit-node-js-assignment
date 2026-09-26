@@ -15,7 +15,7 @@ const Exercises = async () => {
   const exercisesData = await getExercises();
 
   return (
-    <section className="container mx-auto py-10 px-4">
+    <section id="Exercises" className="container mx-auto py-10 px-4">
       {/* Section Title */}
       <h2 className="text-3xl font-bold mb-4">THE LIBRARY</h2>
       <p className="text-gray-600 mb-8">Twelve lifts covering every major muscle group.</p>
