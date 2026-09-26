@@ -1,7 +1,6 @@
 import SavePlanButton from "@/components/exercisesDetails/SavePlanButton";
 import TodayPlanButton from "@/components/exercisesDetails/TodayPlanButton";
 import { IExercise } from "@/types/exercieses.type";
-// import { exercises } from "@/data/exercises.data"; // ⚠️ আপনার আসল data source অনুযায়ী path ঠিক করে নিন
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -11,9 +10,7 @@ interface DetailsPageProps {
 
 const getExercises = async () => {
   const res = await fetch("https://api.abcz.workers.dev/api/fitlog");
-
   const data = await res.json();
-
   return data;
 };
 
@@ -45,10 +42,11 @@ const DetailsPage = async ({ params }: DetailsPageProps) => {
   } = exercise;
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex gap-10 lg:flex-row flex-col">
-        {/* LEFT IMAGE */}
-        <div className="relative h-[400px] w-full overflow-hidden rounded-lg lg:h-[620px] lg:w-[320px] lg:flex-shrink-0">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+        
+        {/* LEFT IMAGE: Responsive height */}
+        <div className="relative h-[280px] sm:h-[380px] md:h-[450px] lg:h-[600px] w-full overflow-hidden rounded-xl border border-[#252a33] lg:w-[360px] xl:w-[400px] lg:shrink-0">
           <Image
             src={image}
             alt={name}
@@ -60,30 +58,31 @@ const DetailsPage = async ({ params }: DetailsPageProps) => {
 
         {/* RIGHT CONTENT */}
         <div className="flex flex-1 flex-col gap-4">
+          
           {/* TITLE */}
-          <h1 className="text-3xl font-extrabold uppercase tracking-wide">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-wide text-white">
             {name}
           </h1>
 
           {/* DESCRIPTION */}
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-400">
+          <p className="text-xs sm:text-sm leading-relaxed text-gray-400">
             {description}
           </p>
 
           {/* TAGS */}
-          <div className="mt-4 flex gap-2">
+          <div className="flex flex-wrap gap-2 pt-1">
             {muscleGroups.map((group) => (
               <span
                 key={group}
-                className="rounded-full bg-lime-400 px-3 py-1 text-xs font-bold text-black"
+                className="rounded-full bg-lime-400 px-3 py-1 text-[11px] sm:text-xs font-bold text-black"
               >
                 {group}
               </span>
             ))}
           </div>
 
-          {/* DETAILS */}
-          <div className="mt-5 overflow-hidden rounded-lg border border-[#252a33] bg-[#151a22]">
+          {/* DETAILS TABLE */}
+          <div className="mt-3 overflow-hidden rounded-lg border border-[#252a33] bg-[#151a22]">
             <DetailRow label="Equipment" value={equipment} />
             <DetailRow label="Difficulty" value={difficulty} />
             <DetailRow label="Sets" value={sets} />
@@ -94,24 +93,26 @@ const DetailsPage = async ({ params }: DetailsPageProps) => {
           </div>
 
           {/* INSTRUCTIONS */}
-          <section className="mt-5">
-            <h2 className="text-sm font-bold uppercase tracking-wider">
+          <section className="mt-4">
+            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white">
               Instructions
             </h2>
-            <ol className="mt-3 space-y-2 text-xs leading-5 text-gray-400">
+            <ol className="mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed text-gray-400">
               {instructions.map((step, index) => (
-                <li key={index}>
-                  <span className="mr-2 text-white">{index + 1}.</span> {step}
+                <li key={index} className="flex gap-2">
+                  <span className="font-bold text-white shrink-0">{index + 1}.</span> 
+                  <span>{step}</span>
                 </li>
               ))}
             </ol>
           </section>
 
-          {/* BUTTONS */}
-          <div className="mt-6 flex flex-wrap gap-3">
+          {/* BUTTONS (Responsive Grid/Flex on mobile) */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-3">
             <TodayPlanButton exercise={exercise} />
             <SavePlanButton exercise={exercise} />
           </div>
+
         </div>
       </div>
     </div>
@@ -129,14 +130,14 @@ function DetailRow({
 }) {
   return (
     <div
-      className={`flex items-center justify-between px-4 py-3 ${
+      className={`flex items-center justify-between px-4 py-2.5 sm:py-3 ${
         last ? "" : "border-b border-[#252a33]"
       }`}
     >
-      <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
+      <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-gray-500">
         {label}
       </span>
-      <span className="text-xs text-gray-200">{value}</span>
+      <span className="text-xs sm:text-sm text-gray-200">{value}</span>
     </div>
   );
 }
