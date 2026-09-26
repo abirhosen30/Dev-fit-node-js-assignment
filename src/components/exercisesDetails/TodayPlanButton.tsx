@@ -3,6 +3,7 @@
 import { IExercise } from "@/types/exercieses.type";
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
+import { Plus } from "lucide-react";
 import { ExercisesContext } from "@/context/ExercisesContext";
 
 interface TodayPlanButtonProps {
@@ -21,8 +22,6 @@ const TodayPlanButton = ({ exercise }: TodayPlanButtonProps) => {
   const { todayPlan, setTodayPlan } = context;
 
   const handleAddToTodayPlan = () => {
-    console.log("Add to today plan btn triggered", exercise);
-
     const alreadyInPlan = todayPlan.some(
       (planExercise) => planExercise.id === exercise.id
     );
@@ -47,9 +46,10 @@ const TodayPlanButton = ({ exercise }: TodayPlanButtonProps) => {
   return (
     <button
       type="button"
-      className="rounded-md bg-lime-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-lime-300"
+      className="flex items-center gap-2 rounded-md bg-lime-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-lime-300"
       onClick={handleAddToTodayPlan}
     >
+      <Plus size={14} strokeWidth={3} />
       Add to Today&apos;s Plan
     </button>
   );

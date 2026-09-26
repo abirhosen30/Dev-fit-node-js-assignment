@@ -56,9 +56,9 @@ const NavBar = () => {
             {/* My Plan */}
             <li>
               <Link
-                href="/my-page"
+                href="/my-plan"
                 className={`px-4 py-1.5 text-xs md:text-sm font-medium transition-all ${
-                  pathname === "/my-page"
+                  pathname === "/my-plan"
                     ? "rounded-full bg-[#273600] text-[#b7f000] hover:bg-[#344900]"
                     : "text-gray-400 hover:text-white"
                 }`}
@@ -75,7 +75,7 @@ const NavBar = () => {
 
           {/* Plan */}
           <Link
-            href="/my-page"
+            href="/my-plan"
             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
           >
             <span>Plan</span>
@@ -96,7 +96,7 @@ const NavBar = () => {
 
           {/* Saved */}
           <Link
-            href="/my-page"
+            href="/my-plan"
             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
           >
             <span>Saved</span>
@@ -166,8 +166,8 @@ const NavBar = () => {
 
             <li>
               <Link
-                href="/my-page"
-                className={pathname === "/my-page" ? "font-bold text-[#b7f000]" : "text-gray-400"}
+                href="/my-plan"
+                className={pathname === "/my-plan" ? "font-bold text-[#b7f000]" : "text-gray-400"}
               >
                 My Plan
               </Link>
@@ -175,7 +175,7 @@ const NavBar = () => {
 
             <li>
               <Link
-                href="/my-page"
+                href="/my-plan"
                 className="flex items-center justify-between text-gray-400"
               >
                 <span>Plan</span>
@@ -185,7 +185,7 @@ const NavBar = () => {
 
             <li>
               <Link
-                href="/my-page"
+                href="/my-plan"
                 className="flex items-center justify-between text-gray-400"
               >
                 <span>Saved</span>

@@ -3,6 +3,7 @@
 import { IExercise } from "@/types/exercieses.type";
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
+import { Bookmark } from "lucide-react";
 import { ExercisesContext } from "@/context/ExercisesContext";
 
 interface SavePlanButtonProps {
@@ -21,8 +22,6 @@ const SavePlanButton = ({ exercise }: SavePlanButtonProps) => {
   const { savePlan, setSavePlan } = context;
 
   const handleAddToSavePlan = () => {
-    console.log("Add to save plan btn triggered", exercise);
-
     const alreadyInPlan = savePlan.some(
       (planExercise) => planExercise.id === exercise.id
     );
@@ -47,12 +46,14 @@ const SavePlanButton = ({ exercise }: SavePlanButtonProps) => {
   return (
     <button
       type="button"
-      className="rounded-md border border-gray-700 text-white px-4 py-2 text-xs font-bold text-black transition hover:bg-gray-700"
+      className="flex items-center gap-2 rounded-md border border-gray-700 px-4 py-2 text-xs font-bold text-white transition hover:bg-gray-700"
       onClick={handleAddToSavePlan}
     >
+      <Bookmark size={14} />
       Save for later
     </button>
   );
 };
 
 export default SavePlanButton;
+
