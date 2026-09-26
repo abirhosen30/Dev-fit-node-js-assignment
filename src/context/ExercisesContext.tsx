@@ -14,107 +14,183 @@ export const MAX_TODAY_PLAN = 5;
 interface IExercisesContext {
   todayPlan: IExercise[];
   setTodayPlan: React.Dispatch<React.SetStateAction<IExercise[]>>;
+
   savePlan: IExercise[];
   setSavePlan: React.Dispatch<React.SetStateAction<IExercise[]>>;
+
   addToTodayPlan: (exercise: IExercise) => boolean;
   addToSavePlan: (exercise: IExercise) => boolean;
+
   removeFromTodayPlan: (exerciseId: number) => void;
   removeFromSavePlan: (exerciseId: number) => void;
+
   isTodayPlanFull: boolean;
-  isLoaded: boolean;
 }
 
-export const ExercisesContext = createContext<IExercisesContext | null>(null);
+export const ExercisesContext =
+  createContext<IExercisesContext | null>(null);
 
-const ExercisesProvider = ({ children }: { children: ReactNode }) => {
-  const [todayPlan, setTodayPlan] = useState<IExercise[]>([]);
-  const [savePlan, setSavePlan] = useState<IExercise[]>([]);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+const ExercisesProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const [todayPlan, setTodayPlan] = useState<IExercise[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    try {
+      const storedToday = localStorage.getItem(
+        "exercise_today_plan"
+      );
+
+      return storedToday ? JSON.parse(storedToday) : [];
+    } catch (error) {
+      console.error(
+        "Failed to load todayPlan from localStorage:",
+        error
+      );
+
+      return [];
+    }
+  });
+
+  const [savePlan, setSavePlan] = useState<IExercise[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    try {
+      const storedSave = localStorage.getItem(
+        "exercise_save_plan"
+      );
+
+      return storedSave ? JSON.parse(storedSave) : [];
+    } catch (error) {
+      console.error(
+        "Failed to load savePlan from localStorage:",
+        error
+      );
+
+      return [];
+    }
+  });
 
   useEffect(() => {
     try {
-      const storedToday = localStorage.getItem("exercise_today_plan");
-      if (storedToday) {
-        setTodayPlan(JSON.parse(storedToday));
-      }
-
-      const storedSave = localStorage.getItem("exercise_save_plan");
-      if (storedSave) {
-        setSavePlan(JSON.parse(storedSave));
-      }
+      localStorage.setItem(
+        "exercise_today_plan",
+        JSON.stringify(todayPlan)
+      );
     } catch (error) {
-      console.error("Failed to load plans from localStorage:", error);
-    } finally {
-      setIsLoaded(true);
+      console.error(
+        "Failed to save todayPlan to localStorage:",
+        error
+      );
     }
-  }, []);
+  }, [todayPlan]);
 
   useEffect(() => {
-    if (!isLoaded) return;
     try {
-      localStorage.setItem("exercise_today_plan", JSON.stringify(todayPlan));
+      localStorage.setItem(
+        "exercise_save_plan",
+        JSON.stringify(savePlan)
+      );
     } catch (error) {
-      console.error("Failed to save todayPlan to localStorage:", error);
+      console.error(
+        "Failed to save savePlan to localStorage:",
+        error
+      );
     }
-  }, [todayPlan, isLoaded]);
+  }, [savePlan]);
 
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem("exercise_save_plan", JSON.stringify(savePlan));
-    } catch (error) {
-      console.error("Failed to save savePlan to localStorage:", error);
-    }
-  }, [savePlan, isLoaded]);
+  const isTodayPlanFull =
+    todayPlan.length >= MAX_TODAY_PLAN;
 
-  const isTodayPlanFull = todayPlan.length >= MAX_TODAY_PLAN;
-
-  const addToTodayPlan = (exercise: IExercise): boolean => {
+  const addToTodayPlan = (
+    exercise: IExercise
+  ): boolean => {
     if (todayPlan.length >= MAX_TODAY_PLAN) {
-      alert(`You can only add up to ${MAX_TODAY_PLAN} exercises to Today's Plan!`);
+      alert(
+        `You can only add up to ${MAX_TODAY_PLAN} exercises to Today's Plan!`
+      );
       return false;
     }
 
-    const isAlreadyAdded = todayPlan.some((item) => item.id === exercise.id);
+    const isAlreadyAdded = todayPlan.some(
+      (item) => item.id === exercise.id
+    );
+
     if (isAlreadyAdded) {
-      alert("This exercise is already in your Today's Plan!");
+      alert(
+        "This exercise is already in your Today's Plan!"
+      );
       return false;
     }
 
-    setTodayPlan((prev) => [...prev, exercise]);
+    setTodayPlan((prev) => [
+      ...prev,
+      exercise,
+    ]);
+
     return true;
   };
 
-  const addToSavePlan = (exercise: IExercise): boolean => {
-    const isAlreadySaved = savePlan.some((item) => item.id === exercise.id);
+  const addToSavePlan = (
+    exercise: IExercise
+  ): boolean => {
+    const isAlreadySaved = savePlan.some(
+      (item) => item.id === exercise.id
+    );
+
     if (isAlreadySaved) {
       alert("This exercise is already saved!");
       return false;
     }
 
-    setSavePlan((prev) => [...prev, exercise]);
+    setSavePlan((prev) => [
+      ...prev,
+      exercise,
+    ]);
+
     return true;
   };
 
-  const removeFromTodayPlan = (exerciseId: number) => {
-    setTodayPlan((prev) => prev.filter((exercise) => exercise.id !== exerciseId));
+  const removeFromTodayPlan = (
+    exerciseId: number
+  ) => {
+    setTodayPlan((prev) =>
+      prev.filter(
+        (exercise) => exercise.id !== exerciseId
+      )
+    );
   };
 
-  const removeFromSavePlan = (exerciseId: number) => {
-    setSavePlan((prev) => prev.filter((exercise) => exercise.id !== exerciseId));
+  const removeFromSavePlan = (
+    exerciseId: number
+  ) => {
+    setSavePlan((prev) =>
+      prev.filter(
+        (exercise) => exercise.id !== exerciseId
+      )
+    );
   };
 
   const sharedData: IExercisesContext = {
     todayPlan,
     setTodayPlan,
+
     savePlan,
     setSavePlan,
+
     addToTodayPlan,
     addToSavePlan,
+
     removeFromTodayPlan,
     removeFromSavePlan,
+
     isTodayPlanFull,
-    isLoaded,
   };
 
   return (
@@ -126,9 +202,13 @@ const ExercisesProvider = ({ children }: { children: ReactNode }) => {
 
 export const useExercises = () => {
   const context = useContext(ExercisesContext);
+
   if (!context) {
-    throw new Error("useExercises must be used within an ExercisesProvider");
+    throw new Error(
+      "useExercises must be used within an ExercisesProvider"
+    );
   }
+
   return context;
 };
 

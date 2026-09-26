@@ -3,7 +3,6 @@
 import { IExercise } from "@/types/exercieses.type";
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
-import { Plus } from "lucide-react";
 import { ExercisesContext } from "@/context/ExercisesContext";
 
 interface TodayPlanButtonProps {
@@ -19,17 +18,16 @@ const TodayPlanButton = ({ exercise }: TodayPlanButtonProps) => {
     );
   }
 
-  const { todayPlan, setTodayPlan } = context;
+  const { todayPlan, setTodayPlan, isTodayPlanFull } = context;
 
   const handleAddToTodayPlan = () => {
+    // অলরেডি যোগ করা থাকলে আগের মতোই Toastify এরর দেখাবে
     const alreadyInPlan = todayPlan.some(
       (planExercise) => planExercise.id === exercise.id
     );
 
     if (alreadyInPlan) {
-      toast.error(
-        `"${exercise.name}" is already in today's plan.`
-      );
+      toast.error(`"${exercise.name}" is already in today's plan.`);
       return;
     }
 
@@ -38,18 +36,20 @@ const TodayPlanButton = ({ exercise }: TodayPlanButtonProps) => {
       exercise,
     ]);
 
-    toast.success(
-      `"${exercise.name}" added to today's plan`
-    );
+    toast.success(`"${exercise.name}" added to today's plan`);
   };
 
   return (
     <button
       type="button"
-      className="flex items-center gap-2 rounded-md bg-lime-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-lime-300"
+      disabled={isTodayPlanFull}
       onClick={handleAddToTodayPlan}
+      className={`rounded-md px-4 py-2 text-xs font-bold transition ${
+        isTodayPlanFull
+          ? "cursor-not-allowed bg-zinc-600 text-zinc-400 opacity-60"
+          : "bg-lime-400 text-black hover:bg-lime-300"
+      }`}
     >
-      <Plus size={14} strokeWidth={3} />
       Add to Today&apos;s Plan
     </button>
   );
